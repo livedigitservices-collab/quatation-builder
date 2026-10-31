@@ -69,7 +69,7 @@ export const TermsAndNotes = ({
           <div className="flex items-start gap-2">
             <span className="font-semibold text-slate-700 shrink-0">Notes:</span>
             <span className="line-clamp-1 text-slate-500 italic">
-              "{notes}"
+              {notes ? `"${notes}"` : 'None'}
             </span>
           </div>
           <div className="flex items-start gap-2">

@@ -22,7 +22,7 @@ import { formatINR } from './utils/formatters';
 import { generateQuotationPDF, validateQuotationForPdf } from './utils/pdfGenerator';
 import { Download, Layers, ShieldCheck, HelpCircle } from 'lucide-react';
 
-const STORAGE_KEY = 'livedigit_quotation_v3';
+const STORAGE_KEY = 'livedigit_quotation_v5';
 
 export default function App() {
   // 1. Initial State Initialization from LocalStorage or Defaults
@@ -33,7 +33,8 @@ export default function App() {
         const parsed = JSON.parse(saved);
         return parsed.map((s) => ({
           ...s,
-          amount: s.amount !== undefined ? s.amount : (s.defaultAmount || 0),
+          quantity: s.quantity !== undefined ? s.quantity : (s.defaultQty !== undefined ? s.defaultQty : 0),
+          amount: s.amount !== undefined ? s.amount : (s.defaultAmount !== undefined ? s.defaultAmount : ''),
         }));
       }
     } catch (e) {
@@ -41,9 +42,9 @@ export default function App() {
     }
     return INITIAL_SERVICES.map((s) => ({
       ...s,
-      selectedPlan: s.defaultPlan || 'basic',
-      quantity: s.defaultQty || 1,
-      amount: s.defaultAmount || 0,
+      selectedPlan: s.defaultPlan || null,
+      quantity: s.defaultQty !== undefined ? s.defaultQty : 0,
+      amount: s.defaultAmount !== undefined ? s.defaultAmount : '',
     }));
   });
 
@@ -84,7 +85,7 @@ export default function App() {
     } catch (e) {
       console.warn('Could not read discount from localStorage', e);
     }
-    return { type: 'percentage', value: 10 };
+    return { type: 'percentage', value: 0 };
   });
 
   const [taxPercent, setTaxPercent] = useState(() => {
@@ -162,7 +163,13 @@ export default function App() {
   }, []);
 
   const handleUpdateQuantity = useCallback((serviceId, newQty) => {
-    const safeQty = Math.max(1, parseInt(newQty, 10) || 1);
+    if (newQty === '') {
+      setServices((prev) =>
+        prev.map((s) => (s.id === serviceId ? { ...s, quantity: '' } : s))
+      );
+      return;
+    }
+    const safeQty = Math.max(0, parseInt(newQty, 10) || 0);
     setServices((prev) =>
       prev.map((s) => (s.id === serviceId ? { ...s, quantity: safeQty } : s))
     );
@@ -201,9 +208,9 @@ export default function App() {
     setServices(
       INITIAL_SERVICES.map((s) => ({
         ...s,
-        selectedPlan: s.defaultPlan || 'basic',
-        quantity: s.defaultQty || 1,
-        amount: s.defaultAmount || 0,
+        selectedPlan: s.defaultPlan || null,
+        quantity: s.defaultQty !== undefined ? s.defaultQty : 0,
+        amount: s.defaultAmount !== undefined ? s.defaultAmount : '',
       }))
     );
     showToast('Restored standard service catalog.', 'success');
@@ -227,9 +234,9 @@ export default function App() {
     setServices(
       INITIAL_SERVICES.map((s) => ({
         ...s,
-        selectedPlan: s.defaultPlan || 'basic',
-        quantity: s.defaultQty || 1,
-        amount: s.defaultAmount || 0,
+        selectedPlan: s.defaultPlan || null,
+        quantity: s.defaultQty !== undefined ? s.defaultQty : 0,
+        amount: s.defaultAmount !== undefined ? s.defaultAmount : '',
       }))
     );
     setCustomer(DEFAULT_CUSTOMER_DETAILS);
@@ -238,7 +245,7 @@ export default function App() {
       quotationDate: new Date().toISOString().split('T')[0],
     });
     setCompany(DEFAULT_COMPANY_DETAILS);
-    setDiscount({ type: 'percentage', value: 10 });
+    setDiscount({ type: 'percentage', value: 0 });
     setTaxPercent(18);
     setTerms(DEFAULT_TERMS_AND_CONDITIONS);
     setNotes(DEFAULT_NOTES);

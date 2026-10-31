@@ -48,6 +48,13 @@ export const calculateQuotationTotals = (services = [], discount = {}, taxPercen
     gstAmount: Math.round(gstAmount * 100) / 100,
     grandTotal: Math.round(grandTotal * 100) / 100,
     itemCount: activeServices.length,
-    totalQuantity: activeServices.reduce((acc, curr) => acc + (Math.max(1, parseInt(curr.quantity, 10) || 1)), 0),
+    totalQuantity: activeServices.reduce(
+      (acc, curr) =>
+        acc +
+        (curr.quantity !== undefined && curr.quantity !== ''
+          ? Math.max(0, parseInt(curr.quantity, 10) || 0)
+          : 0),
+      0
+    ),
   };
 };

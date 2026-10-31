@@ -15,7 +15,7 @@ export const AddServiceModal = ({
   // Custom service state
   const [customName, setCustomName] = useState('');
   const [customAmount, setCustomAmount] = useState('');
-  const [customPlan, setCustomPlan] = useState('basic');
+  const [customPlan, setCustomPlan] = useState(null);
   const [customError, setCustomError] = useState('');
 
   // Combined predefined catalog
@@ -48,13 +48,13 @@ export const AddServiceModal = ({
     }
 
     const amt = parseFloat(customAmount);
-    const validAmount = isNaN(amt) ? 0 : Math.max(0, amt);
+    const validAmount = isNaN(amt) ? '' : Math.max(0, amt);
 
     const newService = {
       id: `custom-${Date.now()}`,
       name: customName.trim(),
-      selectedPlan: customPlan || 'basic',
-      quantity: 1,
+      selectedPlan: customPlan || null,
+      quantity: 0,
       amount: validAmount,
     };
 
@@ -62,7 +62,7 @@ export const AddServiceModal = ({
     // Reset form
     setCustomName('');
     setCustomAmount('');
-    setCustomPlan('basic');
+    setCustomPlan(null);
     setCustomError('');
     onClose();
   };
@@ -150,9 +150,6 @@ export const AddServiceModal = ({
                         <h4 className="font-semibold text-slate-900 text-sm">
                           {item.name}
                         </h4>
-                        <span className="text-xs text-slate-400">
-                          Default Amount: {formatINR(item.defaultAmount || 0)}
-                        </span>
                       </div>
 
                       <div>
@@ -166,9 +163,9 @@ export const AddServiceModal = ({
                             onClick={() => {
                               onAddService({
                                 ...item,
-                                selectedPlan: item.defaultPlan || 'basic',
-                                quantity: item.defaultQty || 1,
-                                amount: item.defaultAmount || 0,
+                                selectedPlan: item.defaultPlan || null,
+                                quantity: item.defaultQty !== undefined ? item.defaultQty : 0,
+                                amount: item.defaultAmount !== undefined ? item.defaultAmount : '',
                               });
                             }}
                             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 transition-all shadow-2xs"
@@ -232,7 +229,7 @@ export const AddServiceModal = ({
                 <div className="grid grid-cols-2 gap-3">
                   <button
                     type="button"
-                    onClick={() => setCustomPlan('basic')}
+                    onClick={() => setCustomPlan(customPlan === 'basic' ? null : 'basic')}
                     className={`py-2 px-3 rounded-xl border text-xs font-semibold text-center transition-all ${
                       customPlan === 'basic'
                         ? 'border-indigo-600 bg-indigo-50 text-indigo-700 ring-1 ring-indigo-600'
@@ -243,7 +240,7 @@ export const AddServiceModal = ({
                   </button>
                   <button
                     type="button"
-                    onClick={() => setCustomPlan('advanced')}
+                    onClick={() => setCustomPlan(customPlan === 'advanced' ? null : 'advanced')}
                     className={`py-2 px-3 rounded-xl border text-xs font-semibold text-center transition-all ${
                       customPlan === 'advanced'
                         ? 'border-indigo-600 bg-indigo-50 text-indigo-700 ring-1 ring-indigo-600'

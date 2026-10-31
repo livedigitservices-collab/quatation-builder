@@ -49,7 +49,7 @@ export const CustomerDetails = ({
               <div className="relative">
                 <input
                   type="text"
-                  placeholder="e.g. AcroPulse Technologies Pvt. Ltd."
+                  placeholder="Client / Company Name"
                   value={customer.clientName || ''}
                   onChange={(e) => handleCustomerChange('clientName', e.target.value)}
                   className={`w-full text-sm px-3.5 py-2.5 rounded-xl border ${
@@ -72,7 +72,7 @@ export const CustomerDetails = ({
               <div className="relative">
                 <input
                   type="text"
-                  placeholder="e.g. Vikramaditya Sharma"
+                  placeholder="Contact Person Name"
                   value={customer.contactPerson || ''}
                   onChange={(e) => handleCustomerChange('contactPerson', e.target.value)}
                   className="w-full text-sm px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-indigo-500 focus:ring-3 focus:ring-indigo-100 focus:outline-hidden transition-all"
@@ -88,7 +88,7 @@ export const CustomerDetails = ({
               <div className="relative">
                 <input
                   type="email"
-                  placeholder="e.g. vikram@acropulse.io (Optional)"
+                  placeholder="Email Address (Optional)"
                   value={customer.email || ''}
                   onChange={(e) => handleCustomerChange('email', e.target.value)}
                   className="w-full text-sm px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-indigo-500 focus:ring-3 focus:ring-indigo-100 focus:outline-hidden transition-all"
@@ -104,7 +104,7 @@ export const CustomerDetails = ({
               <div className="relative">
                 <input
                   type="tel"
-                  placeholder="e.g. +91 98490 12345"
+                  placeholder="Phone Number"
                   value={customer.phone || ''}
                   onChange={(e) => handleCustomerChange('phone', e.target.value)}
                   className="w-full text-sm px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-indigo-500 focus:ring-3 focus:ring-indigo-100 focus:outline-hidden transition-all"
@@ -119,7 +119,7 @@ export const CustomerDetails = ({
               </label>
               <textarea
                 rows={2}
-                placeholder="e.g. Tower B, 6th Floor, Sector 62, Noida, UP 201301"
+                placeholder="Billing Address / Location"
                 value={customer.billingAddress || ''}
                 onChange={(e) => handleCustomerChange('billingAddress', e.target.value)}
                 className="w-full text-sm px-3.5 py-2 rounded-xl border border-slate-300 focus:border-indigo-500 focus:ring-3 focus:ring-indigo-100 focus:outline-hidden transition-all resize-none"

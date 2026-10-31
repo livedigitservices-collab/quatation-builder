@@ -154,7 +154,10 @@ export const generateQuotationPDF = async (data) => {
     const planKey = service.selectedPlan || null;
     const planLabel = planKey ? (planKey === 'advanced' ? 'Advanced' : 'Basic') : '—';
     const serviceName = service.name || 'Service';
-    const qty = Math.max(1, parseInt(service.quantity, 10) || 1);
+    const qty =
+      service.quantity !== undefined && service.quantity !== ''
+        ? Math.max(0, parseInt(service.quantity, 10) || 0)
+        : 0;
     const amount = Math.max(0, Number(service.amount) || 0);
 
     return [

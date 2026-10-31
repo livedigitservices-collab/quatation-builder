@@ -13,23 +13,36 @@ export const ServiceRow = ({
   onRemove,
 }) => {
   const selectedPlan = service.selectedPlan || null;
-  const qty = Math.max(1, parseInt(service.quantity, 10) || 1);
+  const qty = service.quantity !== undefined && service.quantity !== ''
+    ? Math.max(0, parseInt(service.quantity, 10) || 0)
+    : 0;
 
   const handleQtyChange = (e) => {
-    const val = parseInt(e.target.value, 10);
-    if (!isNaN(val)) {
-      onUpdateQuantity(service.id, Math.max(1, val));
+    const raw = e.target.value;
+    if (raw === '') {
+      onUpdateQuantity(service.id, '');
+    } else {
+      const val = parseInt(raw, 10);
+      if (!isNaN(val)) {
+        onUpdateQuantity(service.id, Math.max(0, val));
+      }
     }
   };
 
   const handleDecrement = () => {
-    if (qty > 1) {
-      onUpdateQuantity(service.id, qty - 1);
+    const currentQty = service.quantity !== undefined && service.quantity !== ''
+      ? parseInt(service.quantity, 10) || 0
+      : 0;
+    if (currentQty > 0) {
+      onUpdateQuantity(service.id, currentQty - 1);
     }
   };
 
   const handleIncrement = () => {
-    onUpdateQuantity(service.id, qty + 1);
+    const currentQty = service.quantity !== undefined && service.quantity !== ''
+      ? parseInt(service.quantity, 10) || 0
+      : 0;
+    onUpdateQuantity(service.id, currentQty + 1);
   };
 
   const handlePlanToggle = (planName) => {
@@ -70,16 +83,16 @@ export const ServiceRow = ({
           <button
             type="button"
             onClick={handleDecrement}
-            disabled={qty <= 1}
-            className="w-4 h-7 flex items-center justify-center rounded-md text-slate-600 hover:bg-slate-100 active:bg-slate-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            disabled={qty <= 0}
+            className="w-7 h-7 flex items-center justify-center rounded-md text-slate-600 hover:bg-slate-100 active:bg-slate-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             title="Decrease quantity"
           >
             <Minus className="w-3.5 h-3.5" />
           </button>
           <input
             type="number"
-            min="1"
-            value={qty}
+            min="0"
+            value={service.quantity !== undefined ? service.quantity : 0}
             onChange={handleQtyChange}
             className="w-10 text-center text-sm font-semibold text-slate-800 bg-transparent focus:outline-hidden [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
           />
@@ -187,23 +200,36 @@ export const ServiceCard = ({
   onRemove,
 }) => {
   const selectedPlan = service.selectedPlan || null;
-  const qty = Math.max(1, parseInt(service.quantity, 10) || 1);
+  const qty = service.quantity !== undefined && service.quantity !== ''
+    ? Math.max(0, parseInt(service.quantity, 10) || 0)
+    : 0;
 
   const handleQtyChange = (e) => {
-    const val = parseInt(e.target.value, 10);
-    if (!isNaN(val)) {
-      onUpdateQuantity(service.id, Math.max(1, val));
+    const raw = e.target.value;
+    if (raw === '') {
+      onUpdateQuantity(service.id, '');
+    } else {
+      const val = parseInt(raw, 10);
+      if (!isNaN(val)) {
+        onUpdateQuantity(service.id, Math.max(0, val));
+      }
     }
   };
 
   const handleDecrement = () => {
-    if (qty > 1) {
-      onUpdateQuantity(service.id, qty - 1);
+    const currentQty = service.quantity !== undefined && service.quantity !== ''
+      ? parseInt(service.quantity, 10) || 0
+      : 0;
+    if (currentQty > 0) {
+      onUpdateQuantity(service.id, currentQty - 1);
     }
   };
 
   const handleIncrement = () => {
-    onUpdateQuantity(service.id, qty + 1);
+    const currentQty = service.quantity !== undefined && service.quantity !== ''
+      ? parseInt(service.quantity, 10) || 0
+      : 0;
+    onUpdateQuantity(service.id, currentQty + 1);
   };
 
   const handlePlanToggle = (planName) => {
@@ -297,10 +323,10 @@ export const ServiceCard = ({
             <button
               type="button"
               onClick={handleDecrement}
-              disabled={qty <= 1}
-              className="w-6 h-6 flex items-center justify-center rounded text-slate-600 hover:bg-slate-200 disabled:opacity-40"
+              disabled={qty <= 0}
+              className="w-6 h-6 flex items-center justify-center rounded text-slate-600 hover:bg-slate-200 disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              <Minus className="w-3 h-3" />
+              <Minus className="w-3.5 h-3.5" />
             </button>
             <span className="w-6 text-center text-xs font-bold text-slate-800">
               {qty}
